@@ -1,0 +1,76 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="breadcrumb">
+        <li>Agendamentos</li>
+    </ui:define>
+
+    <ui:define name="content">
+
+        <h:form id="growl">
+            <p:growl life="8000" showDetail="false">
+                <p:autoUpdate></p:autoUpdate>
+            </p:growl>
+        </h:form>
+        <!-- Left column -->
+         <div class="ui-g ui-fluid">
+                <div class="ui-g-8" style="margin: 0 auto;">
+                    <div class="card">
+                    <h1 class="CardBigTopic">Cadastro de Agendamento </h1>
+                    <p:separator/>
+
+                    <h:form id="selectForm">
+
+                        <p:panelGrid columns="1" layout="grid" style="border:0 !important; background:none;"
+                                     styleClass="ui-panelgrid-blank">
+
+                            <h:outputLabel for="dataAgendamento" value="Data de agendamento:"/>
+                            <p:calendar value="#{agendamentoBean.entidade.data}"
+                                        placeholder="Data de Agendamento" id="dataAgendamento"
+                                        converter="localZonedDateTimeConverter"
+                                        pattern="dd/MM/yyyy HH:mm" mask="true" locale="pt_BR"
+                                        onSelect="this.hide()" required="true" requiredMessage="Entre com a data de agendamento !"/>
+
+                            <h:outputLabel for="numero" value="Número:"/>
+                            <p:inputText id="numero" placeholder="numero" value="#{agendamentoBean.entidade.numero}"
+                                         required="true" requiredMessage="Entre com número !"/>
+
+                            <h:outputLabel for="motivo" value="Motivo:"/>
+                            <p:inputText id="motivo" placeholder="motivo" value="#{agendamentoBean.entidade.motivo}"
+                                         required="true" requiredMessage="Entre com motivo !"/>
+
+                            <h:outputLabel for="acSolicitante" value="Solicitante:"/>
+                            <p:autoComplete id="acSolicitante" forceSelection="true" minQueryLength="3"
+                                            value="#{agendamentoBean.entidade.solicitanteId}"
+                                            completeMethod="#{autocompleteBean.autocompleteSolicitante}"
+                                            var="entidade" itemLabel="#{entidade.nome}" itemValue="#{entidade.id}"
+                                            dropdown="true"
+                                            queryDelay="30"
+                                            placeholder="Digite o nome do solicitante ..."
+                                            required="true" requiredMessage="Selecione um Solicitante!">
+                            </p:autoComplete>
+
+                        </p:panelGrid>
+                        <br/>
+                        <p:panelGrid columns="2" layout="grid" style="border:0 !important; background:none;"
+                                     styleClass="ui-panelgrid-blank">
+                            <p:commandButton value="Salvar" icon="pi pi-save"
+                                             update="selectForm" styleClass="ui-button-warning"
+                                             action="#{agendamentoBean.cadastrar()}"/>
+                            <p:commandButton value="Limpar" icon="pi pi-times"
+                                             action="#{agendamentoBean.cancelar()}"
+                                             update="selectForm" styleClass="ui-button-outlined ui-button-secondary"/>
+                        </p:panelGrid>
+                    </h:form>
+
+                </div>
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>

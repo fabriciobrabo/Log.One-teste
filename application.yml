@@ -1,0 +1,87 @@
+logging:
+  level:
+    ROOT: INFO
+server:
+  undertow:
+    ioThreads: 15
+    workerThreads: 150
+    access-log:
+      enabled: true
+      rotate: true
+    max-http-post-size: 20000
+  servlet:
+    session:
+      cookie:
+        http-only: true
+      persistent: false
+      timeout: 30m
+  port: 9494
+  compression:
+    enabled: true
+    mimeTypes: text/xml, text/css, text/html, application/json
+    minResponseSize: 4096
+spring:
+  mvc:
+    view:
+      suffix: .html
+  mail:
+    host: smtp.hostinger.com.br
+    port: 587
+    username: emailexample@email.com
+    password: emailexample
+    protocol: smtp
+    properties.mail.smtp:
+      auth: true
+      starttls.enable: true
+  datasource:
+    url: jdbc:hsqldb:file:C:\\Users\\fabri\\Documents\\workspace\\Jhipster\\brinquedos\\Teste-Pratico-Desenvolvedor-Java\\Teste-Pratico-Desenvolvedor-Java\\database\\agenda\\agenda;hsqldb.lock_file=false
+    username: sa
+    password: sa
+    driver-class-name: org.hsqldb.jdbc.JDBCDriver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      pool-name: HkariPoolConnections
+      auto-commit: false
+      maximum-pool-size: 10
+      minimum-idle: 10
+      connection-timeout: 30000
+      idle-timeout: 600000
+      validation-timeout: 3000
+      initialization-fail-timeout: 5000
+  jpa:
+    show-sql: true
+    hibernate:
+      dialect: org.hibernate.dialect.HSQLDialect
+      ddl-auto: update
+    properties:
+      hibernate.id.new_generator_mappings: true
+      hibernate.connection.provider_disables_autocommit: true
+      hibernate.cache.use_second_level_cache: false
+      hibernate.cache.use_query_cache: false
+      hibernate.generate_statistics: false
+  resources:
+    cache:
+      period: 1000000
+
+joinfaces:
+  jsf:
+    PROJECT_STAGE: Production
+    interpret-empty-string-submitted-values-as-null: true
+    state-saving-method: client
+    facelets:
+      skip-comments: true
+  primefaces:
+      theme: arya
+      font-awesome: true
+      secret: primefaces
+      uploader: commons
+      autoUpdate: auto
+      earlyPostParamEvaluation: true
+      interpolateClientSideValidationMessages: true
+      legacyWidgetNamespace: true
+      clientSideValidation: true
+      resetValues: false
+      submit: partial
+      transformMetadata: true
+      moveScriptsToBottom: true
+      cache-provider: org.primefaces.cache.DefaultCacheProvider

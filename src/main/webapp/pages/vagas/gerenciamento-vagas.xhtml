@@ -1,0 +1,163 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="breadcrumb">
+        <li>Vagas</li>
+    </ui:define>
+
+    <ui:define name="content">
+
+        <h:form id="growl">
+            <p:growl life="8000" showDetail="false">
+                <p:autoUpdate></p:autoUpdate>
+            </p:growl>
+        </h:form>
+
+        <div class="ui-g ui-fluid">
+            <div class="ui-g-12">
+                <div class="card">
+
+                    <h1>Gerenciamento de Vagas</h1>
+
+                    <h:form id="selectForm">
+                        <p:fieldset legend="Ações">
+                            <p:panelGrid columns="4" style="border:0 !important; background:none;" layout="grid"
+                                         styleClass="ui-panelgrid-blank">
+                                <p:button value="Nova Vaga"
+                                          outcome="/pages/vagas/cadastro-vagas.xhtml?faces-redirect=true"
+                                          icon="fa fa-plus Fs16 White"
+                                          iconPos="right"
+                                />
+                                <p:spacer></p:spacer>
+                                <p:spacer></p:spacer>
+                                <p:spacer></p:spacer>
+                            </p:panelGrid>
+                        </p:fieldset>
+                        <br/>
+                        <p:separator/>
+                        <br/>
+                        <h:panelGroup id="panelCliente"
+                        >
+                            <p:dataTable id="entidadeDT" var="entidade" value="#{vagasBean.entidades}">
+
+                                <f:facet name="header">
+                                    Listagem de Vagas
+                                </f:facet>
+
+                                <p:column headerText="ID">
+                                    <h:outputText value="#{entidade.id}"/>
+                                </p:column>
+
+                                <p:column headerText="Data de Início" style="text-align: center">
+                                    <h:outputText value="#{vagasBean.getDataAsString(entidade.inicio)}"/>
+                                </p:column>
+
+                                <p:column headerText="Data Fim" style="text-align: center">
+                                    <h:outputText value="#{vagasBean.getDataAsString(entidade.fim)}"/>
+                                </p:column>
+
+                                <p:column headerText="Quantidade">
+                                    <h:outputText value="#{entidade.quantidade}"/>
+                                </p:column>
+
+                                <p:column headerText="Ações ">
+                                    <div align="centers">
+                                        <p:commandButton id="btnEditEntidade"
+                                                         actionListener="#{vagasBean.setEntidade(entidade)}"
+                                                         icon="pi pi-pencil" iconPos="right"
+                                                         styleClass="green-btn"
+                                                         oncomplete="PF('editarEntidadeDialog').show();"
+                                                         update=":form-editar-entidade:dialog-editar-entidade">
+                                        </p:commandButton>
+                                        <p:spacer width="5"/>
+                                        <p:commandButton id="btnDeleteEntidade"
+                                                         icon="pi pi-trash" iconPos="right"
+                                                         actionListener="#{vagasBean.setEntidade(entidade)}"
+                                                         styleClass="red-btn"
+                                                         oncomplete="PF('excluirEntidadeDialog').show();"
+                                                         update=":dialog-excluir-entidade"/>
+
+                                    </div>
+                                </p:column>
+
+                            </p:dataTable>
+                        </h:panelGroup>
+
+                    </h:form>
+                    <!-- DIALOG DELETE ADMIN -->
+                    <h:form prependId="false">
+                        <p:dialog id="dialog-excluir-entidade" header="Excluir"
+                                  widgetVar="excluirEntidadeDialog"
+                                  modal="true" resizable="false"
+                                  responsive="true">
+
+                            <p:outputPanel id="entidadeDelete" style="text-align:left;">
+                                <h:outputText
+                                        value="Tem certeza que deseja excluir Vaga ID #{vagasBean.entidade.id}?"/>
+                                <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank">
+                                    <p:commandButton value="Confirmar" styleClass="GreenButton"
+                                                     icon="fa fa-check Fs16 White" iconPos="right"
+                                                     action="#{vagasBean.excluir()}"
+                                                     update="selectForm:entidadeDT :growl"
+                                                     onclick="PF('excluirEntidadeDialog').hide();"
+                                                     immediate="true"/>
+                                    <p:commandButton value="Cancelar" styleClass="red-btn"
+                                                     icon="fa fa-ban Fs16 White" iconPos="right"
+                                                     onclick="PF('excluirEntidadeDialog').hide();"
+                                                     immediate="true"/>
+                                </p:panelGrid>
+                            </p:outputPanel>
+                        </p:dialog>
+                    </h:form>
+
+                    <h:form id="form-editar-entidade">
+                        <p:dialog id="dialog-editar-entidade" header="Editar"
+                                  widgetVar="editarEntidadeDialog"
+                                  modal="true" resizable="false"
+                                  responsive="true"
+                                  fitViewport="true">
+                            <p:outputPanel id="entidadeEdit" style="text-align:left;">
+                                <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank">
+
+                                    <h:outputLabel for="dataInicio" value="Data de Início:"/>
+                                    <p:calendar value="#{vagasBean.entidade.inicio}"
+                                                placeholder="Data início" id="dataInicio"
+                                                converter="localZonedDateTimeConverter"
+                                                pattern="dd/MM/yyyy HH:mm" mask="true" locale="pt_BR"
+                                                onSelect="this.hide()" required="true" requiredMessage="Entre com a data de início !"/>
+
+                                    <h:outputLabel for="dataFim" value="Data Fim:"/>
+                                    <p:calendar value="#{vagasBean.entidade.fim}"
+                                                placeholder="Data fim" id="dataFim"
+                                                converter="localZonedDateTimeConverter"
+                                                pattern="dd/MM/yyyy HH:mm" mask="true" locale="pt_BR"
+                                                onSelect="this.hide()" required="true" requiredMessage="Entre com a data fim !"/>
+
+                                    <h:outputLabel for="quantidade" value="Quantidade:"/>
+                                    <p:inputNumber id="quantidade" value="#{vagasBean.entidade.quantidade}" minValue="1" decimalPlaces="0"
+                                                   required="true" requiredMessage="Entre com a quantidade !"/>
+
+                                </p:panelGrid>
+                                <p:commandButton value="Salvar" styleClass="GreenButton"
+                                                 action="#{vagasBean.atualizar()}"
+                                                 icon="fa fa-floppy-o Fs16 White" iconPos="right"
+                                                 update=":form-editar-entidade:dialog-editar-entidade
+                                                                     selectForm:entidadeDT :growl"
+                                                 onclick="PF('editarEntidadeDialog').hide();"/>
+                            </p:outputPanel>
+                        </p:dialog>
+                    </h:form>
+
+                </div>
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>
+
+
+

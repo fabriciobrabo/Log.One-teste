@@ -1,0 +1,151 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="breadcrumb">
+        <li>Agendamentos</li>
+    </ui:define>
+
+    <ui:define name="content">
+
+        <h:form id="growl">
+            <p:growl life="8000" showDetail="false">
+                <p:autoUpdate></p:autoUpdate>
+            </p:growl>
+        </h:form>
+
+        <div class="ui-g ui-fluid">
+            <div class="ui-g-12">
+                <div class="card">
+
+                    <h1>Gerenciamento de Agendamentos</h1>
+
+                    <h:form id="selectForm">
+                        <p:fieldset legend="Filtros">
+                            <p:panelGrid columns="1" style="border:0 !important; background:none;" layout="grid"
+                                         styleClass="ui-panelgrid-blank">
+
+                                <p:calendar value="#{agendamentoBean.filtroWrapper.dataInicio}"
+                                            placeholder="Data de Início" id="dataInicio"
+                                            converter="localZonedDateTimeConverter"
+                                            pattern="dd/MM/yyyy HH:mm" mask="true" locale="pt_BR"
+                                            onSelect="this.hide()" required="true" requiredMessage="Entre com a data de início para o período !"/>
+                                <p:calendar value="#{agendamentoBean.filtroWrapper.dataFim}"
+                                            placeholder="Data Fim" id="dataFim"
+                                            converter="localZonedDateTimeConverter"
+                                            pattern="dd/MM/yyyy HH:mm" mask="true" locale="pt_BR"
+                                            onSelect="this.hide()" required="true" requiredMessage="Entre com a data fim para o período!"/>
+                                <p:autoComplete id="acSolicitante" forceSelection="true" minQueryLength="3"
+                                                value="#{agendamentoBean.filtroWrapper.solicitanteId}"
+                                                completeMethod="#{autocompleteBean.autocompleteSolicitante}"
+                                                var="entidade" itemLabel="#{entidade.nome}" itemValue="#{entidade.id}"
+                                                dropdown="true"
+                                                queryDelay="30"
+                                                placeholder="Digite o nome do solicitante ..."
+                                                >
+                                </p:autoComplete>
+
+                            </p:panelGrid>
+                        </p:fieldset>
+
+                        <p:fieldset legend="Ações">
+                            <p:panelGrid columns="4" style="border:0 !important; background:none;" layout="grid"
+                                         styleClass="ui-panelgrid-blank">
+                                <p:button value="Novo Agendamento"
+                                          outcome="/pages/agendamento/cadastro-agendamento.xhtml?faces-redirect=true"
+                                          icon="fa fa-plus Fs16 White"
+                                          iconPos="right"
+                                />
+                                <p:commandButton value="Pesquisar" icon="fa fa-search Fs16 White" iconPos="right"
+                                                 update="panelCliente" actionListener="#{agendamentoBean.pesquisar()}"/>
+                                <p:commandButton value="Limpar" icon="pi pi-undo"
+                                                 action="#{agendamentoBean.cancelar()}"
+                                                 update="selectForm" styleClass="ui-button-outlined ui-button-secondary"/>
+                                <p:spacer></p:spacer>
+                            </p:panelGrid>
+                        </p:fieldset>
+                        <br/>
+                        <p:separator/>
+                        <br/>
+                        <h:panelGroup id="panelCliente"
+                        >
+                            <p:dataTable id="entidadeDT" var="entidade" value="#{agendamentoBean.entidades}">
+
+                                <f:facet name="header">
+                                    Listagem de Agendamentos
+                                </f:facet>
+
+                                <p:column headerText="ID">
+                                    <h:outputText value="#{entidade.id}"/>
+                                </p:column>
+
+                                <p:column headerText="Data de Agendamento" style="text-align: center">
+                                    <h:outputText value="#{agendamentoBean.getDataAsString(entidade.data)}"/>
+                                </p:column>
+
+                                <p:column headerText="Número do Agendamento">
+                                    <h:outputText value="#{entidade.numero}"/>
+                                </p:column>
+
+                                <p:column headerText="Motivo">
+                                    <h:outputText value="#{entidade.motivo}"/>
+                                </p:column>
+
+                                <p:column headerText="Solicitante">
+                                    <h:outputText value="#{entidade.solicitante.nome}"/>
+                                </p:column>
+
+                                <p:column headerText="Ações ">
+                                    <div align="centers">
+                                        <p:commandButton id="btnDeleteEntidade"
+                                                         icon="pi pi-trash" iconPos="right"
+                                                         actionListener="#{agendamentoBean.setEntidade(entidade)}"
+                                                         styleClass="red-btn"
+                                                         oncomplete="PF('excluirEntidadeDialog').show();"
+                                                         update=":dialog-excluir-entidade"/>
+
+                                    </div>
+                                </p:column>
+
+                            </p:dataTable>
+                        </h:panelGroup>
+
+                    </h:form>
+                    <!-- DIALOG DELETE ADMIN -->
+                    <h:form prependId="false">
+                        <p:dialog id="dialog-excluir-entidade" header="Excluir"
+                                  widgetVar="excluirEntidadeDialog"
+                                  modal="true" resizable="false"
+                                  responsive="true">
+
+                            <p:outputPanel id="entidadeDelete" style="text-align:left;">
+                                <h:outputText
+                                        value="Tem certeza que deseja excluir #{agendamentoBean.entidade.numero}?"/>
+                                <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank">
+                                    <p:commandButton value="Confirmar" styleClass="GreenButton"
+                                                     icon="pi pi-check Fs16 White" iconPos="right"
+                                                     action="#{agendamentoBean.excluir()}"
+                                                     update="selectForm:entidadeDT :growl"
+                                                     onclick="PF('excluirEntidadeDialog').hide();"
+                                                     immediate="true"/>
+                                    <p:commandButton value="Cancelar" styleClass="red-btn"
+                                                     icon="pi pi-times" iconPos="right"
+                                                     onclick="PF('excluirEntidadeDialog').hide();"
+                                                     immediate="true"/>
+                                </p:panelGrid>
+                            </p:outputPanel>
+                        </p:dialog>
+                    </h:form>
+
+                </div>
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>
+
+
+

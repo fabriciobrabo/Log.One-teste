@@ -1,0 +1,68 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="breadcrumb">
+        <li>Vagas</li>
+    </ui:define>
+
+    <ui:define name="content">
+
+        <h:form id="growl">
+            <p:growl life="8000" showDetail="false">
+                <p:autoUpdate></p:autoUpdate>
+            </p:growl>
+        </h:form>
+        <!-- Left column -->
+         <div class="ui-g ui-fluid">
+                <div class="ui-g-8" style="margin: 0 auto;">
+                    <div class="card">
+                    <h1 class="CardBigTopic">Vagas</h1>
+                    <p:separator/>
+
+                    <h:form id="selectForm">
+
+                        <p:panelGrid columns="1" layout="grid" style="border:0 !important; background:none;"
+                                     styleClass="ui-panelgrid-blank">
+
+                            <h:outputLabel for="dataInicio" value="Data de Início:"/>
+                            <p:calendar value="#{vagasBean.entidade.inicio}"
+                                        placeholder="Data início" id="dataInicio"
+                                        converter="localZonedDateTimeConverter"
+                                        pattern="dd/MM/yyyy HH:mm" mask="true" locale="pt_BR"
+                                        onSelect="this.hide()" required="true" requiredMessage="Entre com a data de início !"/>
+
+                            <h:outputLabel for="dataFim" value="Data Fim:"/>
+                            <p:calendar value="#{vagasBean.entidade.fim}"
+                                        placeholder="Data fim" id="dataFim"
+                                        converter="localZonedDateTimeConverter"
+                                        pattern="dd/MM/yyyy HH:mm" mask="true" locale="pt_BR"
+                                        onSelect="this.hide()" required="true" requiredMessage="Entre com a data fim !"/>
+
+                            <h:outputLabel for="quantidade" value="Quantidade:"/>
+                            <p:inputNumber id="quantidade" value="#{vagasBean.entidade.quantidade}" minValue="1" decimalPlaces="0"
+                                           required="true" requiredMessage="Entre com a quantidade !"/>
+
+                        </p:panelGrid>
+                        <br/>
+                        <p:panelGrid columns="2" layout="grid" style="border:0 !important; background:none;"
+                                     styleClass="ui-panelgrid-blank">
+                            <p:commandButton value="Salvar" icon="pi pi-save"
+                                             update="selectForm" styleClass="ui-button-warning"
+                                             action="#{vagasBean.cadastrar()}"/>
+                            <p:commandButton value="Limpar" icon="pi pi-times"
+                                             action="#{vagasBean.cancelar()}"
+                                             update="selectForm" styleClass="ui-button-outlined ui-button-secondary"/>
+                        </p:panelGrid>
+                    </h:form>
+
+                </div>
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>

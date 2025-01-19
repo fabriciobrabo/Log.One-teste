@@ -1,0 +1,33 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <div>
+        <h:form id="menuform">
+            <p:menubar hideDelay="1000">
+                <p:menuitem value="Início" url="/index.xhtml"/>
+
+                <p:divider layout="vertical"/>
+
+                <p:submenu label="Agendamento">
+                    <p:menuitem value="Consultar" url="/pages/agendamento/consulta-agendamento.xhtml"/>
+                    <p:menuitem value="Cadastrar" url="/pages/agendamento/cadastro-agendamento.xhtml"/>
+                    <p:menuitem value="Gerenciar" url="/pages/agendamento/gerenciamento-agendamento.xhtml"/>
+                </p:submenu>
+
+                <p:submenu label="Solicitante">
+                    <p:menuitem value="Cadastrar" url="/pages/solicitante/cadastro-solicitante.xhtml"/>
+                    <p:menuitem value="Gerenciar" url="/pages/solicitante/gerenciamento-solicitante.xhtml"/>
+                </p:submenu>
+
+                <p:submenu label="Vagas">
+                    <p:menuitem value="Cadastrar" url="/pages/vagas/cadastro-vagas.xhtml"/>
+                    <p:menuitem value="Gerenciar" url="/pages/vagas/gerenciamento-vagas.xhtml"/>
+                </p:submenu>
+            </p:menubar>
+        </h:form>
+    </div>
+</ui:composition>
