@@ -9,7 +9,7 @@ Para a arquitetura de dados na camada de visão fiz o uso de DTOs(Data Transfer 
 Para as páginas JSF utilizei um padrão de telas tradicional de CRUD.
 Estou utilizando o recurso de application.yml por ser mais moderno e mais fácil de manter que o application.properties.
 
-Para rodar a aplicação você pode seguir esses 2 caminhos: 
+Para rodar a aplicação você pode seguir esses 2 caminhos: *não esquecer o caminho do banco de dados local
 
 1 - No terminal digite "mvn clean"; depois install e depois "mvn package -DskipTests=true" 
 e depois "java -jar target/Teste-Pratico-Desenvolvedor-Java-0.0.2-SNAPSHOT.jar"
