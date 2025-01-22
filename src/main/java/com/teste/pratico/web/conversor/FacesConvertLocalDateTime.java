@@ -6,14 +6,13 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
-@FacesConverter(value = "localZonedDateTimeConverter")
-public class FacesConvertZonedDateTime implements Converter {
+@FacesConverter(value = "localDateTimeConverter")
+public class FacesConvertLocalDateTime implements Converter {
 
     SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
@@ -26,20 +25,16 @@ public class FacesConvertZonedDateTime implements Converter {
             e.printStackTrace();
             return null;
         }
-        // Get system default time zone id.
-        ZoneId defaultZoneId = ZoneId.systemDefault();
-        // Convert Date to Instant.
-        Instant instant = date.toInstant();
-        // Instant + default time zone.
-        ZonedDateTime zonedDateTime = instant.atZone(defaultZoneId);
-        return zonedDateTime;
+        // Convert Date to LocalDateTime.
+        LocalDateTime localDateTime = date.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+        return localDateTime;
     }
 
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
-        ZonedDateTime dateValue = (ZonedDateTime) value;
-
-        return DateTimeFormatter.ofPattern("dd/MM/yyyy - hh:mm").format(dateValue);
+        LocalDateTime dateValue = (LocalDateTime) value;
+        return DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm").format(dateValue);
     }
-
 }

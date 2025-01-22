@@ -1,37 +1,37 @@
 package com.teste.pratico.service.dto.wrapper;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 public class AgendamentoFiltroWrapper {
 
-    private ZonedDateTime dataInicio;
+    private LocalDateTime dataInicio;
 
-    private ZonedDateTime dataFim;
+    private LocalDateTime dataFim;
 
     private Long solicitanteId;
 
     public AgendamentoFiltroWrapper() {
     }
 
-    public AgendamentoFiltroWrapper(ZonedDateTime dataInicio, ZonedDateTime dataFim, Long solicitanteId) {
+    public AgendamentoFiltroWrapper(LocalDateTime dataInicio, LocalDateTime dataFim, Long solicitanteId) {
         this.dataInicio = dataInicio;
         this.dataFim = dataFim;
         this.solicitanteId = solicitanteId;
     }
 
-    public ZonedDateTime getDataInicio() {
+    public LocalDateTime getDataInicio() {
         return dataInicio;
     }
 
-    public void setDataInicio(ZonedDateTime dataInicio) {
+    public void setDataInicio(LocalDateTime dataInicio) {
         this.dataInicio = dataInicio;
     }
 
-    public ZonedDateTime getDataFim() {
+    public LocalDateTime getDataFim() {
         return dataFim;
     }
 
-    public void setDataFim(ZonedDateTime dataFim) {
+    public void setDataFim(LocalDateTime dataFim) {
         this.dataFim = dataFim;
     }
 

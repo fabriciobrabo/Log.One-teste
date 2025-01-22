@@ -64,6 +64,10 @@
                                     <h:outputText value="#{entidade.quantidade}"/>
                                 </p:column>
 
+                                <p:column headerText="Tipo de Veículo">
+                                    <h:outputText value="#{entidade.tipoVeiculo.name}"/>
+                                </p:column>
+
                                 <p:column headerText="Ações ">
                                     <div align="centers">
                                         <p:commandButton id="btnEditEntidade"
@@ -126,20 +130,28 @@
                                     <h:outputLabel for="dataInicio" value="Data de Início:"/>
                                     <p:calendar value="#{vagasBean.entidade.inicio}"
                                                 placeholder="Data início" id="dataInicio"
-                                                converter="localZonedDateTimeConverter"
+                                                converter="localDateTimeConverter"
                                                 pattern="dd/MM/yyyy HH:mm" mask="true" locale="pt_BR"
                                                 onSelect="this.hide()" required="true" requiredMessage="Entre com a data de início !"/>
 
                                     <h:outputLabel for="dataFim" value="Data Fim:"/>
                                     <p:calendar value="#{vagasBean.entidade.fim}"
                                                 placeholder="Data fim" id="dataFim"
-                                                converter="localZonedDateTimeConverter"
+                                                converter="localDateTimeConverter"
                                                 pattern="dd/MM/yyyy HH:mm" mask="true" locale="pt_BR"
                                                 onSelect="this.hide()" required="true" requiredMessage="Entre com a data fim !"/>
 
                                     <h:outputLabel for="quantidade" value="Quantidade:"/>
                                     <p:inputNumber id="quantidade" value="#{vagasBean.entidade.quantidade}" minValue="1" decimalPlaces="0"
                                                    required="true" requiredMessage="Entre com a quantidade !"/>
+
+                                    <h:outputLabel for="tipoVeiculo" value="Tipo Veículo:"/>
+                                    <p:selectOneMenu id="tipoVeiculo" value="#{vagasBean.entidade.tipoVeiculo}"
+                                                     filter="true">
+                                        <f:selectItem itemLabel=" - Selecione o Tipo de Veículo - " itemValue="#{null}"/>
+                                        <f:selectItems value="#{vagasBean.tipoVeiculoEnums()}"
+                                                       var="entidade" itemLabel="#{entidade.name}" itemValue="#{entidade}"/>
+                                    </p:selectOneMenu>
 
                                 </p:panelGrid>
                                 <p:commandButton value="Salvar" styleClass="GreenButton"

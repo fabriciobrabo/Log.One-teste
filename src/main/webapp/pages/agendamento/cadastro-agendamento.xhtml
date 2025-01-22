@@ -32,7 +32,7 @@
                             <h:outputLabel for="dataAgendamento" value="Data de agendamento:"/>
                             <p:calendar value="#{agendamentoBean.entidade.data}"
                                         placeholder="Data de Agendamento" id="dataAgendamento"
-                                        converter="localZonedDateTimeConverter"
+                                        converter="localDateTimeConverter"
                                         pattern="dd/MM/yyyy HH:mm" mask="true" locale="pt_BR"
                                         onSelect="this.hide()" required="true" requiredMessage="Entre com a data de agendamento !"/>
 
@@ -54,6 +54,14 @@
                                             placeholder="Digite o nome do solicitante ..."
                                             required="true" requiredMessage="Selecione um Solicitante!">
                             </p:autoComplete>
+
+                            <h:outputLabel for="tipoVeiculo" value="Tipo:"/>
+                            <p:selectOneMenu id="tipoVeiculo" value="#{agendamentoBean.entidade.tipoVeiculo}"
+                                             filter="true">
+                                <f:selectItem itemLabel=" - Selecione o Tipo - " itemValue="#{null}"/>
+                                <f:selectItems value="#{agendamentoBean.tipoVeiculoEnums()}"
+                                               var="entidade" itemLabel="#{entidade.name}" itemValue="#{entidade}"/>
+                            </p:selectOneMenu>
 
                         </p:panelGrid>
                         <br/>

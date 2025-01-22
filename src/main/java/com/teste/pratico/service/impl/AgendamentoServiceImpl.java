@@ -2,11 +2,9 @@ package com.teste.pratico.service.impl;
 
 import com.teste.pratico.domain.Agendamento;
 import com.teste.pratico.repository.AgendamentoRepository;
-import com.teste.pratico.repository.VagasRepository;
 import com.teste.pratico.service.AgendamentoService;
 import com.teste.pratico.service.VagasService;
 import com.teste.pratico.service.dto.AgendamentoDTO;
-import com.teste.pratico.service.dto.SolicitanteDTO;
 import com.teste.pratico.service.dto.VagasDTO;
 import com.teste.pratico.service.dto.wrapper.AgendamentoFiltroWrapper;
 import com.teste.pratico.service.dto.wrapper.ConsultaAgendamentoSolicitanteWrapper;
@@ -19,7 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -154,23 +151,29 @@ public class AgendamentoServiceImpl implements AgendamentoService {
         return agendamentosTratados;
     }
 
-    public String validarCadastroAgendamento(AgendamentoDTO agendamentoDTO){
-        //localizar vagas
-        List<VagasDTO> vagas = vagasService.findVagasByData(agendamentoDTO.getData());
-        //localizar agendamentos
-        Set<AgendamentoDTO> agendamentos = new HashSet<>();
-        for (VagasDTO vaga : vagas) {
-            agendamentos.addAll(agendamentoRepository.findByDateBetweenAndSolicitanteId(vaga.getInicio(), vaga.getFim(), null).stream().map(agendamentoMapper::toDto).toList());
-        }
-        agendamentos = agendamentos.stream().distinct().collect(Collectors.toSet());
+    /**
+     * Método otimizado para a validação, 3 etapas, verifica vagas, verificar total vagas está dentro da regra e
+     * depois regra dos 25% com tipo de veiculo
+     * @param agendamentoDTO
+     * @return
+     */
+    public String validarCadastroAgendamento(AgendamentoDTO agendamentoDTO) {
+        List<VagasDTO> vagas = vagasService.findVagasByDataAndTipo(agendamentoDTO.getData(), agendamentoDTO.getTipoVeiculo());
 
-        //cruzar informações para bater vagas gerais
+        if (vagas == null || vagas.isEmpty()) {
+            return "Não foram encontradas vagas para o agendamento";
+        }
+
+        Set<AgendamentoDTO> agendamentos = vagas.stream()
+                .flatMap(vaga -> agendamentoRepository.findByDataBetweenAndSolicitanteIdAndTipo(vaga.getInicio(), vaga.getFim(), null, vaga.getTipoVeiculo()).stream())
+                .map(agendamentoMapper::toDto)
+                .collect(Collectors.toSet());
+
         Map<Long, Integer> vagasAgendamentoCount = new HashMap<>();
-        // somatoria geral bara bater dentro do numero de vagas
         for (AgendamentoDTO agendamento : agendamentos) {
             for (VagasDTO vaga : vagas) {
                 if (!agendamento.getData().isBefore(vaga.getInicio()) && !agendamento.getData().isAfter(vaga.getFim())) {
-                    vagasAgendamentoCount.put(vaga.getId(), vagasAgendamentoCount.getOrDefault(vaga.getId(), 0) + 1);
+                    vagasAgendamentoCount.merge(vaga.getId(), 1, Integer::sum);
                     if (vagasAgendamentoCount.get(vaga.getId()) >= vaga.getQuantidade()) {
                         return "Os agendamentos estão esgotados para o número de vagas.";
                     }
@@ -179,18 +182,18 @@ public class AgendamentoServiceImpl implements AgendamentoService {
         }
 
         Map<Long, Map<Long, Integer>> vagasSolicitanteAgendamentoCount = new HashMap<>();
-        // somatorio por solicitante para não ultrapassar os 25%
         for (AgendamentoDTO agendamento : agendamentos) {
             for (VagasDTO vaga : vagas) {
-                if (!agendamento.getData().isBefore(vaga.getInicio()) && !agendamento.getData().isAfter(vaga.getFim())) {
+                if (!agendamento.getData().isBefore(vaga.getInicio()) && !agendamento.getData().isAfter(vaga.getFim()) &&
+                        agendamento.getTipoVeiculo().equals(vaga.getTipoVeiculo())) {
                     vagasSolicitanteAgendamentoCount
                             .computeIfAbsent(vaga.getId(), k -> new HashMap<>())
                             .merge(agendamento.getSolicitanteId(), 1, Integer::sum);
 
-                    int maxAgendamentos = (int) Math.ceil(vaga.getQuantidade() * 0.25);
+                    int maxAgendamentos = (int) Math.floor(vaga.getQuantidade() * 0.25);
                     if (vagasSolicitanteAgendamentoCount.get(vaga.getId()).get(agendamento.getSolicitanteId()) >= maxAgendamentos) {
-                        if (agendamentoDTO.getSolicitanteId().intValue() == agendamento.getSolicitanteId().intValue()) {
-                            return "O número de agendamentos por solicitante não pode ultrapassar 25% da quantidade total de vagas.";
+                        if (agendamentoDTO.getSolicitanteId().equals(agendamento.getSolicitanteId())) {
+                            return "O número de agendamentos por solicitante não pode ultrapassar 25% da quantidade total de vagas para o tipo: " + vaga.getTipoVeiculo().name() + ".";
                         }
                     }
                 }

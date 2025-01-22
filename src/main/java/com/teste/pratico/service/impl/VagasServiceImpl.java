@@ -1,10 +1,9 @@
 package com.teste.pratico.service.impl;
 
-import com.teste.pratico.domain.Agendamento;
 import com.teste.pratico.domain.Vagas;
+import com.teste.pratico.domain.enumerations.TipoVeiculo;
 import com.teste.pratico.repository.VagasRepository;
 import com.teste.pratico.service.VagasService;
-import com.teste.pratico.service.dto.AgendamentoDTO;
 import com.teste.pratico.service.dto.VagasDTO;
 import com.teste.pratico.service.mapper.VagasMapper;
 import org.slf4j.Logger;
@@ -14,7 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -102,14 +101,17 @@ public class VagasServiceImpl implements VagasService {
      */
 
     @Override
-    public List<VagasDTO> findByInicioOrFimBetween(ZonedDateTime periodoInicio, ZonedDateTime periodoFim) {
+    public List<VagasDTO> findByInicioOrFimBetween(LocalDateTime periodoInicio, LocalDateTime periodoFim) {
         List<Vagas> vagas = vagasRepository.findByInicioOrFimBetween(periodoInicio, periodoFim);
         return vagas.stream().map(vagasMapper::toDto).toList();
     }
 
+    /**
+     NOVO
+     */
     @Override
-    public List<VagasDTO> findVagasByData(ZonedDateTime data) {
-        List<Vagas> vagas = vagasRepository.findByDataBetweenInicioAndFim(data);
+    public List<VagasDTO> findVagasByDataAndTipo(LocalDateTime data, TipoVeiculo tipo) {
+        List<Vagas> vagas = vagasRepository.findByDataBetweenInicioAndFimAndTipo(data, tipo);
         return vagas.stream().map(vagasMapper::toDto).toList();
     }
 }

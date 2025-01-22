@@ -1,12 +1,12 @@
 package com.teste.pratico.service;
 
 import com.teste.generico.bean.RestServiceRepository;
-import com.teste.pratico.service.dto.AgendamentoDTO;
+import com.teste.pratico.domain.enumerations.TipoVeiculo;
 import com.teste.pratico.service.dto.VagasDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,7 +77,7 @@ public interface VagasService extends RestServiceRepository<VagasDTO, Long> {
      * Abaixo métodos implementados declarados em interface que não são genéricos
      */
 
-    List<VagasDTO> findByInicioOrFimBetween(ZonedDateTime periodoInicio, ZonedDateTime periodoFim);
+    List<VagasDTO> findByInicioOrFimBetween(LocalDateTime periodoInicio, LocalDateTime periodoFim);
 
-    List<VagasDTO> findVagasByData(ZonedDateTime data);
+    List<VagasDTO> findVagasByDataAndTipo(LocalDateTime data, TipoVeiculo tipo);
 }

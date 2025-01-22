@@ -1,17 +1,15 @@
 package com.teste.pratico.web.bean;
 
+import com.teste.pratico.domain.enumerations.TipoVeiculo;
 import com.teste.pratico.service.VagasService;
 import com.teste.pratico.service.dto.VagasDTO;
 import com.teste.pratico.web.util.JSFUtil;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 
 @Named
@@ -41,10 +39,14 @@ public class VagasBean extends EntidadeDescritivaBean<VagasDTO, VagasService>{
         }
     }
 
+    public TipoVeiculo[] tipoVeiculoEnums(){
+        return TipoVeiculo.values();
+    }
+
     private boolean validarDatas() {
-        ZonedDateTime dataInicio = entidade.getInicio();
-        ZonedDateTime dataFim = entidade.getFim();
-        ZonedDateTime dataAtual = ZonedDateTime.now();
+        LocalDateTime dataInicio = entidade.getInicio();
+        LocalDateTime dataFim = entidade.getFim();
+        LocalDateTime dataAtual = LocalDateTime.now();
 
         if (dataInicio.isBefore(dataAtual)) {
             JSFUtil.setErro("A data de início não pode ser menor que a data atual.");

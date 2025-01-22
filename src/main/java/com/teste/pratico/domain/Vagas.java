@@ -1,9 +1,11 @@
 package com.teste.pratico.domain;
 
 
+import com.teste.pratico.domain.enumerations.TipoVeiculo;
+
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "VAGAS", schema = "PUBLIC")
@@ -17,13 +19,17 @@ public class Vagas implements Serializable {
     private Long id;
 
     @Column(name = "INICIO")
-    private ZonedDateTime inicio;
+    private LocalDateTime inicio;
 
     @Column(name = "FIM")
-    private ZonedDateTime fim;
+    private LocalDateTime fim;
 
     @Column(name = "QUANTIDADE")
     private Integer quantidade;
+
+    @Column(name = "TIPO_VEICULO")
+    @Enumerated(EnumType.STRING)
+    private TipoVeiculo tipoVeiculo;
 
     public Long getId() {
         return id;
@@ -33,19 +39,19 @@ public class Vagas implements Serializable {
         this.id = id;
     }
 
-    public ZonedDateTime getInicio() {
+    public LocalDateTime getInicio() {
         return inicio;
     }
 
-    public void setInicio(ZonedDateTime inicio) {
+    public void setInicio(LocalDateTime inicio) {
         this.inicio = inicio;
     }
 
-    public ZonedDateTime getFim() {
+    public LocalDateTime getFim() {
         return fim;
     }
 
-    public void setFim(ZonedDateTime fim) {
+    public void setFim(LocalDateTime fim) {
         this.fim = fim;
     }
 
@@ -55,6 +61,14 @@ public class Vagas implements Serializable {
 
     public void setQuantidade(Integer quantidade) {
         this.quantidade = quantidade;
+    }
+
+    public TipoVeiculo getTipoVeiculo() {
+        return tipoVeiculo;
+    }
+
+    public void setTipoVeiculo(TipoVeiculo tipo) {
+        this.tipoVeiculo = tipo;
     }
 
     @Override
@@ -80,6 +94,7 @@ public class Vagas implements Serializable {
                 ", inicio=" + inicio +
                 ", fim=" + fim +
                 ", quantidade=" + quantidade +
+                ", tipoVeiculo='" + tipoVeiculo + '\'' +
                 '}';
     }
 }

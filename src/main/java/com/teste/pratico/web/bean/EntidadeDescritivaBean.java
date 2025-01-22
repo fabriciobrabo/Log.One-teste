@@ -11,7 +11,7 @@ import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
@@ -49,7 +49,7 @@ public abstract class EntidadeDescritivaBean<T, R extends RestServiceRepository>
         else return "-";
     }
 
-    public String getDataAsString(ZonedDateTime local) {
+    public String getDataAsString(LocalDateTime local) {
         if (local != null)
             return DateTimeFormatter.ofPattern("dd/MM/yy HH:mm").format(local);
         else return "-";

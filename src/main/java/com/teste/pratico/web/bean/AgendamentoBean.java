@@ -1,5 +1,6 @@
 package com.teste.pratico.web.bean;
 
+import com.teste.pratico.domain.enumerations.TipoVeiculo;
 import com.teste.pratico.service.AgendamentoService;
 import com.teste.pratico.service.dto.AgendamentoDTO;
 import com.teste.pratico.service.dto.wrapper.AgendamentoFiltroWrapper;
@@ -62,6 +63,10 @@ public class AgendamentoBean extends EntidadeDescritivaBean<AgendamentoDTO, Agen
     public String cancelar(){
         filtroWrapper = new AgendamentoFiltroWrapper();
         return super.cancelar();
+    }
+
+    public TipoVeiculo[] tipoVeiculoEnums(){
+        return TipoVeiculo.values();
     }
 
     public AgendamentoFiltroWrapper getFiltroWrapper() {

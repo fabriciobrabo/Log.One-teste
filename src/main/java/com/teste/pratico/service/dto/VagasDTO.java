@@ -1,18 +1,22 @@
 package com.teste.pratico.service.dto;
 
+import com.teste.pratico.domain.enumerations.TipoVeiculo;
+
 import java.io.Serializable;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class VagasDTO implements Serializable {
 
     private Long id;
 
-    private ZonedDateTime inicio;
+    private LocalDateTime inicio;
 
-    private ZonedDateTime fim;
+    private LocalDateTime fim;
 
     private Integer quantidade;
+
+    private TipoVeiculo tipoVeiculo;
 
     public Long getId() {
         return id;
@@ -22,19 +26,19 @@ public class VagasDTO implements Serializable {
         this.id = id;
     }
 
-    public ZonedDateTime getInicio() {
+    public LocalDateTime getInicio() {
         return inicio;
     }
 
-    public void setInicio(ZonedDateTime inicio) {
+    public void setInicio(LocalDateTime inicio) {
         this.inicio = inicio;
     }
 
-    public ZonedDateTime getFim() {
+    public LocalDateTime getFim() {
         return fim;
     }
 
-    public void setFim(ZonedDateTime fim) {
+    public void setFim(LocalDateTime fim) {
         this.fim = fim;
     }
 
@@ -44,6 +48,14 @@ public class VagasDTO implements Serializable {
 
     public void setQuantidade(Integer quantidade) {
         this.quantidade = quantidade;
+    }
+
+    public TipoVeiculo getTipoVeiculo() {
+        return tipoVeiculo;
+    }
+
+    public void setTipoVeiculo(TipoVeiculo tipoVeiculo) {
+        this.tipoVeiculo = tipoVeiculo;
     }
 
     @Override
@@ -74,6 +86,7 @@ public class VagasDTO implements Serializable {
                 ", inicio=" + inicio +
                 ", fim=" + fim +
                 ", quantidade=" + quantidade +
+                ", tipoVeiculo=" + tipoVeiculo +
                 '}';
     }
 }

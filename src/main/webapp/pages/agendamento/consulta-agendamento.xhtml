@@ -30,12 +30,12 @@
 
                                 <p:calendar value="#{agendamentoBean.filtroWrapper.dataInicio}"
                                             placeholder="Data de Início" id="dataInicio"
-                                            converter="localZonedDateTimeConverter"
+                                            converter="localDateTimeConverter"
                                             pattern="dd/MM/yyyy HH:mm" mask="true" locale="pt_BR"
                                             onSelect="this.hide()" required="true" requiredMessage="Entre com a data de início para o período !"/>
                                 <p:calendar value="#{agendamentoBean.filtroWrapper.dataFim}"
                                             placeholder="Data Fim" id="dataFim"
-                                            converter="localZonedDateTimeConverter"
+                                            converter="localDateTimeConverter"
                                             pattern="dd/MM/yyyy HH:mm" mask="true" locale="pt_BR"
                                             onSelect="this.hide()" required="true" requiredMessage="Entre com a data fim para o período!"/>
                                 <p:autoComplete id="acSolicitante" forceSelection="true" minQueryLength="3"

@@ -1,8 +1,10 @@
 package com.teste.pratico.domain;
 
+import com.teste.pratico.domain.enumerations.TipoVeiculo;
+
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "AGENDAMENTO", schema = "PUBLIC")
@@ -16,13 +18,17 @@ public class Agendamento implements Serializable {
     private Long id;
 
     @Column(name = "DATA")
-    private ZonedDateTime data;
+    private LocalDateTime data;
 
     @Column(name = "NUMERO")
     private String numero;
 
     @Column(name = "MOTIVO")
     private String motivo;
+
+    @Column(name = "TIPO_VEICULO")
+    @Enumerated(EnumType.STRING)
+    private TipoVeiculo tipoVeiculo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SOLICITANTE_ID")
@@ -36,11 +42,11 @@ public class Agendamento implements Serializable {
         this.id = id;
     }
 
-    public ZonedDateTime getData() {
+    public LocalDateTime getData() {
         return data;
     }
 
-    public void setData(ZonedDateTime data) {
+    public void setData(LocalDateTime data) {
         this.data = data;
     }
 
@@ -68,6 +74,14 @@ public class Agendamento implements Serializable {
         this.solicitante = solicitante;
     }
 
+    public TipoVeiculo getTipoVeiculo() {
+        return tipoVeiculo;
+    }
+
+    public void setTipoVeiculo(TipoVeiculo tipo) {
+        this.tipoVeiculo = tipo;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -91,6 +105,7 @@ public class Agendamento implements Serializable {
                 ", data=" + data +
                 ", numero='" + numero + '\'' +
                 ", motivo='" + motivo + '\'' +
+                ", tipoVeiculo='" + tipoVeiculo + '\'' +
                 ", solicitante=" + solicitante +
                 '}';
     }
